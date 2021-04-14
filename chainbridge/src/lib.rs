@@ -269,7 +269,9 @@ decl_module! {
         /// # </weight>
         #[weight = 195_000_000]
         pub fn add_relayer(origin, v: T::AccountId) -> DispatchResult {
+            print("Execute add_relayer");
             Self::ensure_admin(origin)?;
+            print("After ensure_admin");
             Self::register_relayer(v)
         }
 
@@ -410,6 +412,7 @@ impl<T: Config> Module<T> {
 
     /// Adds a new relayer to the set
     pub fn register_relayer(relayer: T::AccountId) -> DispatchResult {
+        print("Execute register_relayer");
         ensure!(
             !Self::is_relayer(&relayer),
             Error::<T>::RelayerAlreadyExists
