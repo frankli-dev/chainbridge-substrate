@@ -526,10 +526,16 @@ impl<T: Config> Module<T> {
         call: Box<T::Proposal>,
     ) -> DispatchResult {
         Self::deposit_event(RawEvent::ProposalApproved(src_id, nonce));
+        frame_support::debug::info!("MYDEBUG_START");
         call.dispatch(frame_system::RawOrigin::Signed(Self::account_id()).into())
             .map(|_| ())
-            .map_err(|e| e.error)?;
+            .map_err(|e| {
+                frame_support::debug::info!("MYDEBUG_finalize_execution {:?}", e.error);
+                e.error
+            })?;
+        frame_support::debug::info!("MYDEBUG_END");
         Self::deposit_event(RawEvent::ProposalSucceeded(src_id, nonce));
+        frame_support::debug::info!("MYDEBUG_SUCCESSED");
         Ok(())
     }
 
